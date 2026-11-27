@@ -1,3 +1,4 @@
+const gameRoutes = require('./routes/gameRoutes.routes');
 const connectDB = require('./database');
 const Hapi = require('@hapi/hapi');
 
@@ -18,6 +19,8 @@ const init = async() => {
         }
     });
 
+    server.route(gameRoutes);
+    
     await server.start();
     console.log('Serverkörs på:', server.info.uri);
 };
