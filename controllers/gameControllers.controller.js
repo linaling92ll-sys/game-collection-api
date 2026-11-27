@@ -63,6 +63,20 @@ const updateGame = async (request, h) => {
     }
 };
 
+// Ta bort spel från databasen
+const deleteGame = async (request, h) => {
+    try {
+        const deletedGame = await Game.findByIdAndDelete(request.params.id);
+        if (!deletedGame) {
+            return h.response({ message: 'Spelet kunde inte hittas '}).code(404);
+        }
+
+        return h.response({ message: 'Spelet har tagits bort' }).code(200);
+    } catch (error) {
+        return h.response({ message: 'Kunde inte ta bort spelet', error: error.message }).code(400);
+    }
+};
+
 
 // Lägg till ett nytt spel i databasen
 const createGame = async(request, h) => {
@@ -85,5 +99,6 @@ module.exports = {
     getAllGames,
     getGameById,
     updateGame,
+    deleteGame,
     createGame
 };

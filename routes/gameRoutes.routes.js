@@ -65,6 +65,13 @@ const gameRoutes = [
             }
         },
         handler: gameController.updateGame
+    },
+
+    // Ta bort ett spel
+    {
+        method: 'DELETE',
+        path: '/games/{id}',
+        handler: gameController.deleteGame
     }
 ];
 
