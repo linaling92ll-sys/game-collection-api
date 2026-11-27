@@ -50,6 +50,21 @@ const gameRoutes = [
             }
         },
         handler: gameController.createGame
+    },
+
+    // Uppdatera ett befintligt spel
+    {
+        method: 'PUT',
+        path: '/games/{id}',
+        options: {
+            validate: {
+                payload: gameValidateSchema,
+                failAction: (request, h, error) => {
+                    return h.response({ message: error.details[0].message }).code(400).takeover();
+                }
+            }
+        },
+        handler: gameController.updateGame
     }
 ];
 

@@ -39,6 +39,30 @@ const getGameById = async (request, h) => {
     }
 };
 
+// Uppdatera ett spel med hjälp av ID
+const updateGame = async (request, h) => {
+    try {
+        const updatedGame = await Game.findByIdAndUpdate(
+            request.params.id,
+            request.payload, 
+            {
+                returnDocument: 'after',
+                runValidators: true
+            }
+        );
+        if (!updatedGame) {
+            return h.response({ message: 'Spelet kunde inte hittas' }).code(404);
+        }
+
+        return h.response(updatedGame).code(200);
+    } catch (error) {
+        return h.response({
+            message: 'Kunde inte uppdatera spelet',
+            error: error.message
+        }).code(400);
+    }
+};
+
 
 // Lägg till ett nytt spel i databasen
 const createGame = async(request, h) => {
@@ -60,5 +84,6 @@ const createGame = async(request, h) => {
 module.exports = {
     getAllGames,
     getGameById,
+    updateGame,
     createGame
 };
