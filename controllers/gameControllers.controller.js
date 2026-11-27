@@ -13,11 +13,20 @@ const formatDate = (date) => {
     }).format(date);
 };
 
+// Formatera ett spels information inklusive datum
+const formatGame = (game) => {
+    return {
+        ...game.toObject(),
+        createdAt: formatDate(game.createdAt),
+        updatedAt: formatDate(game.updatedAt)
+    };
+};
+
 // Hämta alla spel från databasen
 const getAllGames = async (request, h) => {
     try {
         const games = await Game.find();
-        return h.response(games).code(200);
+        return h.response(games.map(formatGame)).code(200);
     } catch (error) {
         return h.response({ message: 'Kunde inte hämta spelen:'}).code(500);
     }
@@ -33,7 +42,7 @@ const getGameById = async (request, h) => {
             return h.response({ message: 'Spelet kunde inte hittas' }).code(404);
         }
 
-        return h.response(game).code(200);
+        return h.response(formatGame(game)).code(200);
     } catch (error) {
         return h.response({ message: 'Kunde inte hämta spelet', error: error.message }).code(400);
     }
@@ -54,7 +63,7 @@ const updateGame = async (request, h) => {
             return h.response({ message: 'Spelet kunde inte hittas' }).code(404);
         }
 
-        return h.response(updatedGame).code(200);
+        return h.response(formatGame(updatedGame)).code(200);
     } catch (error) {
         return h.response({
             message: 'Kunde inte uppdatera spelet',
