@@ -1,0 +1,113 @@
+//Hämtar spelmodellen från models/Game.model.js
+const Game = require('../models/Game.model');
+
+// Formatera datum och tid enligt svensk tidszon
+const formatDate = (date) => {
+    return new Intl.DateTimeFormat('sv-SE', {
+        timeZone: 'Europe/Stockholm',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    }).format(date);
+};
+
+// Formatera ett spels information inklusive datum
+const formatGame = (game) => {
+    return {
+        ...game.toObject(),
+        createdAt: formatDate(game.createdAt),
+        updatedAt: formatDate(game.updatedAt)
+    };
+};
+
+// Hämta alla spel från databasen
+const getAllGames = async (request, h) => {
+    try {
+        const games = await Game.find();
+        return h.response(games.map(formatGame)).code(200);
+    } catch (error) {
+        return h.response({ message: 'Kunde inte hämta spelen:'}).code(500);
+    }
+};
+
+// Hämta ett specifikt spel med hjälp av ID
+const getGameById = async (request, h) => {
+    
+    try {
+        const game = await Game.findById(request.params.id);
+
+        if (!game) {
+            return h.response({ message: 'Spelet kunde inte hittas' }).code(404);
+        }
+
+        return h.response(formatGame(game)).code(200);
+    } catch (error) {
+        return h.response({ message: 'Kunde inte hämta spelet', error: error.message }).code(400);
+    }
+};
+
+// Uppdatera ett spel med hjälp av ID
+const updateGame = async (request, h) => {
+    try {
+        const updatedGame = await Game.findByIdAndUpdate(
+            request.params.id,
+            request.payload, 
+            {
+                returnDocument: 'after',
+                runValidators: true
+            }
+        );
+        if (!updatedGame) {
+            return h.response({ message: 'Spelet kunde inte hittas' }).code(404);
+        }
+
+        return h.response(formatGame(updatedGame)).code(200);
+    } catch (error) {
+        return h.response({
+            message: 'Kunde inte uppdatera spelet',
+            error: error.message
+        }).code(400);
+    }
+};
+
+// Ta bort spel från databasen
+const deleteGame = async (request, h) => {
+    try {
+        const deletedGame = await Game.findByIdAndDelete(request.params.id);
+        if (!deletedGame) {
+            return h.response({ message: 'Spelet kunde inte hittas '}).code(404);
+        }
+
+        return h.response({ message: 'Spelet har tagits bort' }).code(200);
+    } catch (error) {
+        return h.response({ message: 'Kunde inte ta bort spelet', error: error.message }).code(400);
+    }
+};
+
+
+// Lägg till ett nytt spel i databasen
+const createGame = async(request, h) => {
+    try {
+        const newGame = new Game(request.payload);
+        const savedGame = await newGame.save();
+
+        const response = { ...savedGame.toObject(),
+            createdAt: formatDate(savedGame.createdAt),
+            updatedAt: formatDate(savedGame.updatedAt)
+        };
+
+        return h.response(response).code(201);
+    } catch (error) {
+        return h.response({ message: 'Kunde inte lägga till nytt spel', error: error.message }).code(400);
+    }
+};
+
+module.exports = {
+    getAllGames,
+    getGameById,
+    updateGame,
+    deleteGame,
+    createGame
+};
