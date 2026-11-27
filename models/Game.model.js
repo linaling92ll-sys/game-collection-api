@@ -22,7 +22,8 @@ const gameSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-});
+},
+ {timestamps: true });
 
 // Skapar modellen och exporterar den
 const Game = mongoose.model('Game', gameSchema);
