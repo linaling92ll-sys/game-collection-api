@@ -30,6 +30,13 @@ const gameRoutes = [
         path: '/games',
         handler: gameController.getAllGames
     },
+    // Hämta ett specifikt spel med ID
+    {
+        method: 'GET',
+        path: '/games/{id}',
+        handler: gameController.getGameById
+    },
+
     // Lägga till ett nytt spel
     {
         method: 'POST',
