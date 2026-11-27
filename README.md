@@ -25,7 +25,6 @@ Ett spel innehåller följande fält:
 | `createdAt` |  Date | Datum så spelet skapades |
 | `updatedAt` |  Date | Datum då spelet senast uppdaterades |
 | `_id` |  ObjectId | Spelets id |
-Varje spel får även ett unikt _id som skapas automatiskt av MongoDB.
 
 ## Installation och start
 ### 1. Klona projektet
