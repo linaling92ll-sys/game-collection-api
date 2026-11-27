@@ -16,15 +16,15 @@ Projektet är utvecklat med Node.js och Hapi.js. Mongoose används för att komm
 ## Datamodell
 Varje spel sparas som ett dokument i MongoDB:s samling av spel.
 Ett spel innehåller följande fält:
-| Fält | Datatyp | 
+| Fält | Datatyp | Beskrivning |
 |---|---|---|
-| `title` | String |
-| `genre` | String |
-| `rating` | Number |
-| `completed` | Boolean |
-| `createdAt` |  Date |
-| `updatedAt` |  Date |
-| `_id` |  ObjectId |
+| `title` | String | Spelets titel |
+| `genre` | String | Spelets genre |
+| `rating` | Number | Betyg mellan 1 och 10 |
+| `completed` | Boolean | Anger om spelet är färdigspelat |
+| `createdAt` |  Date | Datum så spelet skapades |
+| `updatedAt` |  Date | Datum då spelet senast uppdaterades |
+| `_id` |  ObjectId | Spelets id |
 Varje spel får även ett unikt _id som skapas automatiskt av MongoDB.
 
 ## Installation och start
